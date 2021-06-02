@@ -24,5 +24,26 @@
             component.set("v.dependentValues", ['--None--']);
             component.set("v.isDisabled" , true);
         }
+    },
+
+    chooseLeads : function(component, event, helper) {
+        
+        var setter = component.get("c.setLeads");
+
+        setter.setParams({
+            'regionName' : component.get("v.regionApi"),
+            'stringCountryNames' : component.get("v.countryApi"),
+            'ownerName' : component.get("v.ownerApi")
+        });
+
+        setter.setCallback(this, function(response) {
+            let state = response.getState();
+            if (state === "SUCCESS") {  
+                $A.get("e.force:closeQuickAction").fire();
+                $A.get('e.force:refreshView').fire();
+            }
+        });
+
+        $A.enqueueAction(setter);
     }
 })

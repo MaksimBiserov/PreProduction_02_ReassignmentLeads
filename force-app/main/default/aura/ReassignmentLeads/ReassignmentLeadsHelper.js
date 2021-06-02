@@ -1,10 +1,11 @@
 
 ({
-    setValues: function(component) {
+    setValues : function(component) {
 
-        var action = component.get("c.getDependentMap");
+        var adressAction = component.get("c.getDependentMap");
+        var ownerAction = component.get("c.getOwnerNames");
 
-        action.setCallback(this, function(response) {
+        adressAction.setCallback(this, function(response) {
             if (response.getState() == "SUCCESS") {
                 var savedResponse = response.getReturnValue();
 
@@ -29,7 +30,24 @@
             }
         });
 
-        $A.enqueueAction(action);
+        ownerAction.setCallback(this, function(response) {
+
+            if (response.getState() == "SUCCESS") {
+                var owners = [];
+                var values = response.getReturnValue();
+
+                owners.push('--None--');
+
+                for (var i = 0; i < values.length; i++) {
+                    owners.push(values[i]);
+                }
+
+                component.set("v.ownerValues", owners);
+            }
+        });
+
+        $A.enqueueAction(adressAction);
+        $A.enqueueAction(ownerAction);
     },
     
     setDependentValues: function(component, dependentFieldsList) {

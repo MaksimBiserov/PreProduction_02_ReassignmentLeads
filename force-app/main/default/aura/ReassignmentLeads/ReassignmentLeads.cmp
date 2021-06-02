@@ -8,17 +8,43 @@
     <aura:attribute name="dependentValues" type="list" default="['--None--']"/>
     <aura:attribute name="fullMap" type="map"/>
     <aura:attribute name="isDisabled" type="boolean" default="true"/>
+    <aura:attribute name="ownerValues" type="list" default="[]"/>
 
-    <ui:inputSelect multiple="false" label="Select Region" change="{!c.onChange}">
+    <aura:attribute name="objectApi" type="Lead" default="{'sobjectType' : 'Lead'}"/>
+    <aura:attribute name="regionApi" type="String" default=""/>
+    <aura:attribute name="countryApi" type="String" default=""/>
+    <aura:attribute name="ownerApi" type="String" default=""/>
+
+    <ui:inputSelect multiple="false"
+                    label="Select Region"
+                    value="{!v.regionApi}"
+                    change="{!c.onChange}">
+
         <aura:iteration items="{!v.controlledValues}" var="val">
             <ui:inputSelectOption label="{!val}" text="{!val}"/>
         </aura:iteration>
+
     </ui:inputSelect>
 
-    <ui:inputSelect multiple="true" label="Select Country" disabled="{!v.isDisabled}">
+    <ui:inputSelect multiple="true"
+                    label="Select Country"
+                    value="{!v.countryApi}"
+                    disabled="{!v.isDisabled}">
+        
         <aura:iteration items="{!v.dependentValues}" var="val">
             <ui:inputSelectOption label="{!val}" text="{!val}"/>
         </aura:iteration>
+
+    </ui:inputSelect>
+
+    <ui:inputSelect multiple="false"
+                    label="Select Owner"
+                    value="{!v.ownerApi}">
+
+        <aura:iteration items="{!v.ownerValues}" var="val">
+            <ui:inputSelectOption label="{!val}" text="{!val}"/>
+        </aura:iteration>
+
     </ui:inputSelect>
 
     <br/>
