@@ -3,6 +3,7 @@
     setValues : function(component) {
 
         var adressAction = component.get("c.getDependentMap");
+        var statusAction = component.get("c.getStatus");
         var ownerAction = component.get("c.getOwnerNames");
 
         adressAction.setCallback(this, function(response) {
@@ -30,6 +31,19 @@
             }
         });
 
+        statusAction.setCallback(this, function(response) {
+            if(response.getState() == "SUCCESS") {
+                var statuses = [];
+                var values = response.getReturnValue();
+
+                for(var i = 0; i < values.length; i++) {
+                    statuses.push(values[i]);
+                }
+
+                component.set("v.statusValues", statuses);
+            }
+        });
+
         ownerAction.setCallback(this, function(response) {
 
             if (response.getState() == "SUCCESS") {
@@ -47,6 +61,7 @@
         });
 
         $A.enqueueAction(adressAction);
+        $A.enqueueAction(statusAction);
         $A.enqueueAction(ownerAction);
     },
     

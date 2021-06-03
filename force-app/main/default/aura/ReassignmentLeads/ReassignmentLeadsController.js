@@ -33,6 +33,7 @@
         setter.setParams({
             'regionName' : component.get("v.regionApi"),
             'stringCountryNames' : component.get("v.countryApi"),
+            'stringStatuses' : component.get("v.statusApi"),
             'ownerName' : component.get("v.ownerApi")
         });
 
