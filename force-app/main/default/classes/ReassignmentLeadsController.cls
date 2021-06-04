@@ -6,8 +6,8 @@ public with sharing class ReassignmentLeadsController {
     @AuraEnabled
     public static Map<String, List<String>> getDependentMap() {
         
-        List<Region__c> regionItems = [SELECT Id, Name FROM Region__c];
-        List<Country__c> countryItems = [SELECT Id, Name, Region__c FROM Country__c];
+        List<Region__c> regionItems = [SELECT Id, Name FROM Region__c LIMIT 100];
+        List<Country__c> countryItems = [SELECT Id, Name, Region__c FROM Country__c LIMIT 200];
         List<String> stringRegions = new List<String>();
         
         Map<String,List<String>> results = new Map<String,List<String>>();
