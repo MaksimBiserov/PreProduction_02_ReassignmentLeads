@@ -13,11 +13,8 @@ public with sharing class BatchReassignment implements Database.Batchable<SObjec
     }
 
     public void execute(Database.BatchableContext bc, List<Lead> scope) {
-
-        System.debug('ownerId: ' + ownerId);
         
         for (Lead item : scope) {
-            System.debug('item: ' + item);
             item.OwnerId = ownerId;
         }
 

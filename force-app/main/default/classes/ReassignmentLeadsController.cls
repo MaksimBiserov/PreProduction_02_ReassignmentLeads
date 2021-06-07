@@ -9,24 +9,19 @@ public with sharing class ReassignmentLeadsController {
         List<Region__c> regionItems = [SELECT Id, Name FROM Region__c LIMIT 100];
         List<Country__c> countryItems = [SELECT Id, Name, Region__c FROM Country__c LIMIT 200];
         List<String> stringRegions = new List<String>();
-        
         Map<String,List<String>> results = new Map<String,List<String>>();
 
         for(Region__c regionItem : regionItems) {
-            System.debug('regionItem: ' + regionItem.Name);
             List<String> stringCountries = new List<String>();
 
             for(Country__c countryItem : countryItems) {
                 if(countryItem.Region__c == regionItem.Id) {
                     stringCountries.add(countryItem.Name);
-                    System.debug('countryItem: ' + countryItem.Name);
                 }
             }
 
             results.put(regionItem.Name, stringCountries);
         }
-
-        System.debug('results: ' + results);
 
         return results;
     }
@@ -43,19 +38,17 @@ public with sharing class ReassignmentLeadsController {
                  FROM UserLicense
                  WHERE Name ='Salesforce')]);
 
-        List<User> users = [SELECT Id, Name
+        List<User> users = [SELECT Id, Username
                                            FROM User
                                            WHERE ProfileId
                                            IN: profileIds.Keyset()];
 
-        System.debug('users: ' + users);
         List<String> userNames = new List<String>();
 
         for(User user : users) {
-            userNames.add(user.Name);
+            userNames.add(user.Username);
         }
 
-        System.debug('UserNames: ' + userNames);
         return userNames;
     }
 
@@ -71,10 +64,8 @@ public with sharing class ReassignmentLeadsController {
         
         for (Schema.PicklistEntry item : picklistEntries) {
             picklistValues.add(item.getValue());
-            System.debug('Item: ' + item.getValue());
         }
 
-        System.debug('picklistValues: ' + picklistValues);
         return picklistValues;
     }
 
@@ -82,37 +73,25 @@ public with sharing class ReassignmentLeadsController {
     public static void setLeads(String regionName, String stringCountryNames,
                                 String stringStatuses, String ownerName) {
         
-        System.debug('regionName: ' + regionName);
-        System.debug('stringCountryNames: ' + stringCountryNames);
-        System.debug('stringStatuses: ' + stringStatuses);
-        System.debug('ownerName: ' + ownerName);
 
         List<String> countryNames = stringCountryNames.split(';');
-        System.debug('countryNames: ' + countryNames);
-
         List<String> statuses = stringStatuses.split(';');
-        System.debug('statuses: ' + statuses);
-
         Region__c region = [SELECT Id FROM Region__c WHERE Name =: regionName][0];
         List<Country__c> countries = [SELECT Id FROM Country__c WHERE Name IN: countryNames];
         String queryCountries = 'Country__c = ';
         String queryStatuses = 'Status = ';
 
         for(Country__c country : countries) {
-            System.debug('country Id: ' + country.Id);
             queryCountries += '\'' + country.Id + '\' OR Country__c = ';
         }
 
         queryCountries = queryCountries.removeEnd(' OR Country__c = ');
-        System.debug('queryCountries: ' + queryCountries);
 
         for(String status : statuses) {
-            System.debug('status: ' + status);
             queryStatuses += '\'' + status + '\' OR Status = ';
         }
 
         queryStatuses = queryStatuses.removeEnd(' OR Status = ');
-        System.debug('queryStatuses: ' + queryStatuses);
 
         String query = 'SELECT Id, Name FROM Lead WHERE Region__c = \'' +
                         region.Id +
@@ -121,9 +100,7 @@ public with sharing class ReassignmentLeadsController {
                         ') AND (' +
                         queryStatuses + ')';
 
-        System.debug('query: ' + query);
-
-        User user = [SELECT Id, Name FROM User WHERE Name =: ownerName][0];
+        User user = [SELECT Id, Username FROM User WHERE Username =: ownerName][0];
 
         BatchReassignment batch = new BatchReassignment(query, user.Id);
         Database.executeBatch(batch);
