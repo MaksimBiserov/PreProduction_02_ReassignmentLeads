@@ -72,7 +72,7 @@ private class ReassignmentLeadsControllerTest {
 
         for(String userName : resultUserNames) {
             if(userName.contains('testmail')) {
-                System.assertEquals(userName.contains('Test User'), true);
+                System.assertEquals(userName.contains('@testmail.ru'), true);
             }
         }
     }
@@ -94,7 +94,7 @@ private class ReassignmentLeadsControllerTest {
         List<Country__c> countries = [SELECT Id, Name FROM Country__c];
         String stringCountryNames = '';
         Lead ld = [SELECT Id, LastName, Status, OwnerId, Region__c, Country__c FROM Lead][0];
-        User user = [SELECT Id, Name FROM User WHERE Id =: ld.OwnerId];
+        User user = [SELECT Id, Name, Username FROM User WHERE Id =: ld.OwnerId];
         System.debug('User before update from test: ' + user);
 
         for(Country__c country : countries) {
@@ -109,9 +109,11 @@ private class ReassignmentLeadsControllerTest {
                                 'Closed - Not Converted';
 
         String ownerName = 'Test User 0';
+        User userToUpdate = [SELECT Id, Name, Username FROM User WHERE Name =: 'Test User 0'];
+        System.debug('user that will be assign from test: ' + userToUpdate);
 
         Test.startTest();
-        ReassignmentLeadsController.setLeads(region.Name, stringCountryNames, stringStatuses, 'Test User 0');
+        ReassignmentLeadsController.setLeads(region.Name, stringCountryNames, stringStatuses, userToUpdate.Username);
         Test.stopTest();
         
         System.debug('region.Name from test: ' + region.Name);
@@ -122,9 +124,9 @@ private class ReassignmentLeadsControllerTest {
         Lead updatedLead = [SELECT Id, LastName, OwnerId FROM Lead][0];
         System.debug('updatedLead from test: ' + updatedLead);
         System.debug('updatedLead.OwnerId from test: ' + updatedLead.OwnerId);
-        User updatedUser = [SELECT Id, Name FROM User WHERE Id =: updatedLead.OwnerId];
+        User updatedUser = [SELECT Id, Name, Username FROM User WHERE Id =: updatedLead.OwnerId];
         System.debug('user after update from test: ' + updatedUser);
         
-        System.assertEquals(updatedUser.Name, 'Test User 0');
+        System.assertEquals(updatedUser.Username, userToUpdate.Username);
     }
 }
