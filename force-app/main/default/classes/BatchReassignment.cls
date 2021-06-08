@@ -15,7 +15,10 @@ public with sharing class BatchReassignment implements Database.Batchable<SObjec
     public void execute(Database.BatchableContext bc, List<Lead> scope) {
         
         for (Lead item : scope) {
+            Database.DMLOptions dmo = new Database.DMLOptions();
+            dmo.assignmentRuleHeader.useDefaultRule = false;
             item.OwnerId = ownerId;
+            item.setOptions(dmo);
         }
 
         update scope;
