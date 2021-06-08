@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AssignmentRules xmlns="http://soap.sforce.com/2006/04/metadata">
+    <assignmentRule>
+        <fullName>AssignmentOwner</fullName>
+        <active>true</active>
+        <ruleEntry>
+            <assignedTo>testuser01@mail.ru</assignedTo>
+            <assignedToType>User</assignedToType>
+            <formula>Country__r.Name  = &apos;USA&apos;</formula>
+        </ruleEntry>
+        <ruleEntry>
+            <assignedTo>mksmbiserov@resilient-shark-j8v2ql.com</assignedTo>
+            <assignedToType>User</assignedToType>
+            <formula>Country__r.Name &lt;&gt; &apos;USA&apos;</formula>
+        </ruleEntry>
+    </assignmentRule>
+    <assignmentRule>
+        <fullName>Standard</fullName>
+        <active>false</active>
+        <ruleEntry>
+            <assignedTo>mksmbiserov@resilient-shark-j8v2ql.com</assignedTo>
+            <assignedToType>User</assignedToType>
+            <criteriaItems>
+                <field>Lead.Country</field>
+                <operation>equals</operation>
+                <value>US,USA,United States,United States of America</value>
+            </criteriaItems>
+        </ruleEntry>
+        <ruleEntry>
+            <assignedTo>testuser01@mail.ru</assignedTo>
+            <assignedToType>User</assignedToType>
+            <criteriaItems>
+                <field>Lead.Country</field>
+                <operation>notEqual</operation>
+                <value>US,USA,United States,United States of America</value>
+            </criteriaItems>
+        </ruleEntry>
+    </assignmentRule>
+</AssignmentRules>

@@ -1,0 +1,70 @@
+
+<aura:component controller="ReassignmentLeadsController"
+                access="global">
+
+    <aura:handler name="init" value="this" action="{!c.doInit}"/>
+
+    <aura:attribute name="controlledValues" type="list" default="[]"/>
+    <aura:attribute name="dependentValues" type="list" default="['--None--']"/>
+    <aura:attribute name="fullMap" type="map"/>
+    <aura:attribute name="isDisabled" type="boolean" default="true"/>
+    <aura:attribute name="statusValues" type="list" default="[]"/>
+    <aura:attribute name="ownerValues" type="list" default="[]"/>
+
+    <aura:attribute name="objectApi" type="Lead" default="{'sobjectType' : 'Lead'}"/>
+    <aura:attribute name="regionApi" type="String" default=""/>
+    <aura:attribute name="countryApi" type="String" default=""/>
+    <aura:attribute name="statusApi" type="String" default=""/>
+    <aura:attribute name="ownerApi" type="String" default=""/>
+
+    <ui:inputSelect multiple="false"
+                    label="Select Region"
+                    value="{!v.regionApi}"
+                    change="{!c.onChange}"
+                    required="true">
+
+        <aura:iteration items="{!v.controlledValues}" var="val">
+            <ui:inputSelectOption label="{!val}" text="{!val}"/>
+        </aura:iteration>
+
+    </ui:inputSelect>
+
+    <ui:inputSelect multiple="true"
+                    label="Select Country"
+                    value="{!v.countryApi}"
+                    disabled="{!v.isDisabled}"
+                    required="true">
+        
+        <aura:iteration items="{!v.dependentValues}" var="val">
+            <ui:inputSelectOption label="{!val}" text="{!val}"/>
+        </aura:iteration>
+
+    </ui:inputSelect>
+
+    <ui:inputSelect multiple="true"
+                    label="Select Status"
+                    value="{!v.statusApi}"
+                    required="true">
+
+        <aura:iteration items="{!v.statusValues}" var="val">
+            <ui:inputSelectOption label="{!val}" text="{!val}"/>
+        </aura:iteration>
+
+    </ui:inputSelect>
+
+    <ui:inputSelect multiple="false"
+                    label="Select Owner"
+                    value="{!v.ownerApi}"
+                    required="true">
+
+        <aura:iteration items="{!v.ownerValues}" var="val">
+            <ui:inputSelectOption label="{!val}" text="{!val}"/>
+        </aura:iteration>
+
+    </ui:inputSelect>
+    
+    <br/>
+
+    <ui:button label="Choose Leads" press="{!c.chooseLeads}"/>
+
+</aura:component>
